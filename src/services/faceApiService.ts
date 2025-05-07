@@ -13,6 +13,7 @@ await faceapi.nets.faceRecognitionNet.loadFromUri('/models');
 export async function detectFaces(video: HTMLVideoElement) {
   const detections = await faceapi
     .detectAllFaces(video, new faceapi.TinyFaceDetectorOptions())
+    .withFaceLandmarks()
     .withFaceExpressions()
     .withAgeAndGender()
   return detections;
