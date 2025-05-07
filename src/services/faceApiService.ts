@@ -1,20 +1,22 @@
 import * as faceapi from 'face-api.js';
 
-export const faceApiService = {
-  // Load models from the public directory
-  async loadModels() {
-    const MODEL_URL = '/models'; // Path where models are stored
+export async function loadModels() {
 
-    await faceapi.nets.ssdMobilenetv1.loadFromUri(MODEL_URL);
-    await faceapi.nets.faceLandmark68Net.loadFromUri(MODEL_URL);
-    await faceapi.nets.faceRecognitionNet.loadFromUri(MODEL_URL);
-  },
+  await faceapi.nets.tinyFaceDetector.loadFromUri('/models');
+await faceapi.nets.faceExpressionNet.loadFromUri('/models');
+await faceapi.nets.ageGenderNet.loadFromUri('/models');
+await faceapi.nets.faceLandmark68Net.loadFromUri('/models');
+await faceapi.nets.faceRecognitionNet.loadFromUri('/models');
 
-  // Detect faces in the video feed
-  async detectFaces(video: HTMLVideoElement) {
-    const detections = await faceapi.detectAllFaces(video)
-      .withFaceLandmarks()
-      .withFaceDescriptors();
-    return detections;
-  }
-};
+}
+
+export async function detectFaces(video: HTMLVideoElement) {
+  const detections = await faceapi
+    .detectAllFaces(video, new faceapi.TinyFaceDetectorOptions())
+    .withFaceExpressions()
+    .withAgeAndGender()
+  return detections;
+}
+
+
+
